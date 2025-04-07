@@ -55,3 +55,39 @@ eksctl version
 
 
 echo "Initialization script completed successfully."
+
+echo "======================================="
+echo "Initialization Script Completed"
+echo "Checking service statuses..."
+echo "---------------------------------------"
+
+# Jenkins
+echo "[*] Jenkins Status:"
+sudo systemctl is-active --quiet jenkins && echo "Jenkins is running" || echo "Jenkins is NOT running "
+
+# Docker
+echo "[*] Docker Status:"
+sudo systemctl is-active --quiet docker && echo "Docker is running" || echo "Docker is NOT running"
+
+# SonarQube
+echo "[*] SonarQube Container:"
+docker ps | grep sonar && echo "SonarQube is running" || echo "SonarQube container is NOT running"
+
+# Trivy
+echo "[*] Trivy Version:"
+trivy --version
+
+# AWS CLI
+echo "[*] AWS CLI Version:"
+aws --version
+
+# Kubectl
+echo "[*] Kubectl Version:"
+kubectl version --client --short
+
+# eksctl
+echo "[*] eksctl Version:"
+eksctl version
+
+echo "======================================="
+echo  "All services initialized (check above for any)"
