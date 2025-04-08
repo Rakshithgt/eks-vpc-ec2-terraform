@@ -66,7 +66,7 @@ resource "aws_eks_addon" "vpc_cni" {
 resource "aws_eks_addon" "coredns" {
   cluster_name      = aws_eks_cluster.eks.name
   addon_name        = "coredns"
-  addon_version     = "v1.10.1-eksbuild.2"
+  addon_version     = "v1.11.1-eksbuild.4"
   resolve_conflicts_on_create  = "OVERWRITE"
   resolve_conflicts_on_update  = "OVERWRITE"
   depends_on        = [aws_eks_cluster.eks]
@@ -113,7 +113,7 @@ resource "aws_iam_role_policy_attachment" "ebs_csi" {
 resource "aws_eks_addon" "ebs_csi" {
   cluster_name             = aws_eks_cluster.eks.name
   addon_name               = "aws-ebs-csi-driver"
-  addon_version            = "v1.39.0-eksbuild.1"
+  addon_version            = "v1.41.0-eksbuild.1"
   service_account_role_arn = aws_iam_role.ebs_csi_role.arn
   resolve_conflicts_on_create  = "OVERWRITE"
   resolve_conflicts_on_update  = "OVERWRITE"

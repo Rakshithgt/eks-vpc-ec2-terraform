@@ -2,6 +2,16 @@ provider "aws" {
   region = var.aws_region
 }
 
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_name
+}
+
 module "vpc" {
   source              = "./vpc"
   vpc_cidr            = var.vpc_cidr
@@ -44,4 +54,28 @@ module "ec2-instance" {
     Name = "Jenkins-SonarQube"
     Env  = var.env
   }
+}
+resource "kubernetes_config_map" "aws_auth" {
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
+  }
+
+  data = {
+    mapRoles = yamlencode([
+      {
+        rolearn  = module.eks_node_group.node_role_arn
+        username = "system:node:{{EC2PrivateDNSName}}"
+        groups   = [
+          "system:bootstrappers",
+          "system:nodes"
+        ]
+      }
+    ])
+  }
+
+  depends_on = [
+    module.eks,
+    module.eks_node_group
+  ]
 }
