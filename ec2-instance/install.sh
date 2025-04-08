@@ -53,6 +53,12 @@ curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/d
 sudo mv /tmp/eksctl /usr/local/bin
 eksctl version
 
+# Install Terraform
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update
+sudo apt install terraform -y
+
 
 echo "Initialization script completed successfully."
 
@@ -88,6 +94,10 @@ kubectl version --client --short
 # eksctl
 echo "[*] eksctl Version:"
 eksctl version
+
+#terraform
+echo "[*] terraform Version:"
+terraform --version
 
 echo "======================================="
 echo  "All services initialized (check above for any)"
